@@ -19,10 +19,11 @@ function createMainWindow() {
     width: 330,
     height: 515,
     x: width - 330,
-    y: height - 515,
+    y: height - 535, //515 normal
     frame: false,
     transparent: true,
-    webPreferences: {nodeIntegration: true}
+    webPreferences: {nodeIntegration: true},
+    icon: 'maxLogo.png'
   })
 
   window.loadURL(`http://34.95.248.194/`)
