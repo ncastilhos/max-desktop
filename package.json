@@ -2,6 +2,8 @@
   "name": "max-desktop",
   "version": "0.2.0",
   "license": "MIT",
+  "author": "Innovation Center Meta",
+  "description": "The desktop version of Max Assistant",
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
@@ -18,6 +20,17 @@
     "webpack": "~4.42.1"
   },
   "build": {
-    "appId": "com.inov.max-desktop"
+    "productName": "Max Desktop",
+    "appId": "com.inov.max-desktop",
+    "asar": true,
+    "directories": {
+      "buildResources": "resources",
+      "output": "dist"
+    },
+    "files": ["**/*", "resources/icon.ico"],
+    "win": {
+      "target": "nsis",
+      "icon": "resources/icon.ico"
+    }
   }
 }

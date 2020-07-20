@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, screen, Tray } from 'electron'
+import { app, BrowserWindow, screen, Tray, Menu, nativeImage} from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
 
@@ -8,6 +8,8 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow
+let tray
+var iconpath = path.join(__dirname, 'resources' ,'icon.ico')
 
 function createMainWindow() {
 
@@ -23,13 +25,48 @@ function createMainWindow() {
     frame: false,
     transparent: true,
     webPreferences: {nodeIntegration: true},
-    icon: 'maxLogo.png'
+    icon: iconpath
   })
 
   window.loadURL(`http://34.95.248.194/`)
 
-  window.on('closed', () => {
-    mainWindow = null
+  // var tray = new Tray(iconpath)
+  let trayIcon = nativeImage.createFromPath(iconpath)
+  trayIcon = trayIcon.resize({ width: 16, height: 16 });
+  tray = new Tray(trayIcon)
+
+  var contextMenu = Menu.buildFromTemplate([
+    {
+        label: 'Abrir Chat', click: function () {
+            window.show()
+        }
+    },
+    {
+        label: 'Esconder', click: function () {
+            window.hide();
+        }
+    },
+    {
+        label: 'Fechar', click: function () {
+            // app.isQuiting = true
+            window.destroy();
+            app.quit()
+        }
+    }
+  ])
+
+  tray.setToolTip('Max Desktop')
+  tray.setContextMenu(contextMenu)
+
+  window.on('close', (event) => {
+    // mainWindow = null
+    event.preventDefault();
+    window.hide();
+  })
+
+  window.on('minimize', function (event) {
+    event.preventDefault()
+    mainWindow.hide()
   })
 
   window.webContents.on('devtools-opened', () => {
