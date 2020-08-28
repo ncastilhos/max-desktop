@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, screen, Tray, Menu, nativeImage} from 'electron'
+import { app, BrowserWindow, screen, Tray, Menu, nativeImage, remote} from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
 
@@ -18,23 +18,25 @@ function createMainWindow() {
   let height = display.bounds.height;
 
   const window = new BrowserWindow({
-    width: 330,
+    width: 345,
     height: 515,
-    x: width - 330,
+    x: width - 345,
     y: height - 535, //515 normal
     frame: false,
     transparent: true,
     webPreferences: {nodeIntegration: true},
-    icon: iconpath
+    icon: iconpath,
+    resizable: false,
   })
 
-  window.loadURL(`http://34.95.248.194/`)
-
+  // window.loadURL(`http://localhost:5000/noBubble/`)
+  window.loadURL(`http://34.95.248.194/noBubble/`)
+  
   // var tray = new Tray(iconpath)
   let trayIcon = nativeImage.createFromPath(iconpath)
   trayIcon = trayIcon.resize({ width: 16, height: 16 });
   tray = new Tray(trayIcon)
-
+//
   var contextMenu = Menu.buildFromTemplate([
     {
         label: 'Abrir Chat', click: function () {
@@ -58,16 +60,19 @@ function createMainWindow() {
   tray.setToolTip('Max Desktop')
   tray.setContextMenu(contextMenu)
 
+  tray.on('double-click', (event) => {
+    window.show()
+  })
+
   window.on('close', (event) => {
     // mainWindow = null
     event.preventDefault();
     window.hide();
   })
 
-  window.on('minimize', function (event) {
-    event.preventDefault()
-    mainWindow.hide()
-  })
+  // window.once('ready-to-show', () => {
+  //   window.show()//
+  // })
 
   window.webContents.on('devtools-opened', () => {
     window.focus()
@@ -98,3 +103,5 @@ app.on('activate', () => {
 app.on('ready', () => {
   mainWindow = createMainWindow()
 })
+
+
