@@ -18,19 +18,20 @@ function createMainWindow() {
   let height = display.bounds.height;
 
   const window = new BrowserWindow({
-    width: 345,
-    height: 515,
-    x: width - 345,
-    y: height - 535, //515 normal
+    width: 415,
+    height: 570,
+    x: width - 415,
+    y: height - 595, //515 normal
     frame: false,
     transparent: true,
     webPreferences: {nodeIntegration: true},
     icon: iconpath,
     resizable: false,
+    show: true,
   })
 
   // window.loadURL(`http://localhost:5000/noBubble/`)
-  window.loadURL(`http://34.95.248.194/noBubble/`)
+  window.loadURL(`https://max-assistant.tk/noBubble/`)
   
   // var tray = new Tray(iconpath)
   let trayIcon = nativeImage.createFromPath(iconpath)
@@ -103,5 +104,3 @@ app.on('activate', () => {
 app.on('ready', () => {
   mainWindow = createMainWindow()
 })
-
-
